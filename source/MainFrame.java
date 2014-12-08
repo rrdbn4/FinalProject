@@ -6,7 +6,7 @@ import java.awt.event.*;
 
 /** 
 MainFrame is purely used for the ability to run an applet as an application
-@author Robert Dunn, Holly Busken, Matt Linder
+@author Robert Dunn, Holly Busken, Matt Lindner
 */
 public class MainFrame extends JFrame
 {
