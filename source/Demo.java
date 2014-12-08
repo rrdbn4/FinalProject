@@ -6,7 +6,7 @@ import java.awt.*;
 
 /**
 Demo is the driver class for the 
-@author Robert Dunn, Holly Busken, Matt Linder
+@author Robert Dunn, Holly Busken, Matt Lindner
 */
 public class Demo extends JApplet implements ActionListener
 { 
