@@ -15,6 +15,8 @@ public class Demo extends JApplet implements ActionListener
   JMenuItem author, problemDescription, references, help;
   JMenuItem interactive, sequential, slideshow, zoomshow;
 
+  SlideShow slideFrame;
+
   public void init()
   {
     setSize(800, 600);
@@ -56,7 +58,13 @@ public class Demo extends JApplet implements ActionListener
   {
     if(e.getSource() == slideshow)
     {
-      System.out.println("slide");
+      if(slideFrame == null || slideFrame.isClosed())
+      {
+        slideFrame = new SlideShow();
+        desktop.add(slideFrame);
+      }
+      slideFrame.setVisible(true);
+      slideFrame.toFront();
     }
     if(e.getSource() == zoomshow)
     {
@@ -65,7 +73,7 @@ public class Demo extends JApplet implements ActionListener
   }
 
   /**
-	Open the applet in a frame is called as such
+	Open the applet in a frame
   */
   public static void main(String[] args)
   {
