@@ -10,7 +10,10 @@ Demo is the driver class for the
 */
 public class Demo extends JApplet implements ActionListener
 { 
-  JDesktopPane desktop;
+  JDesktopPane desktop;  
+  JMenuBar menuBar;
+  JMenuItem author, problemDescription, references, help;
+  JMenuItem interactive, sequential, slideshow, zoomshow;
 
   public void init()
   {
@@ -18,13 +21,47 @@ public class Demo extends JApplet implements ActionListener
 
     desktop = new JDesktopPane();
     getContentPane().add(desktop);
+
+
+    menuBar = new JMenuBar();
+    setJMenuBar(menuBar);
+    JMenu about = new JMenu("About");
+    menuBar.add(about);
+    JMenu demos = new JMenu("Demos");
+    menuBar.add(demos);
+    JMenu audio = new JMenu("Audio");
+    demos.add(audio);
+    JMenu images = new JMenu("Images");
+    demos.add(images);
+
+    interactive = new JMenuItem("Interactive");
+    interactive.addActionListener(this);
+    audio.add(interactive);
+    sequential = new JMenuItem("Sequential");
+    sequential.addActionListener(this);
+    audio.add(sequential);
+
+    slideshow = new JMenuItem("Slide Show");
+    slideshow.addActionListener(this);
+    images.add(slideshow);
+    zoomshow = new JMenuItem("Zoom Show");
+    zoomshow.addActionListener(this);
+    images.add(zoomshow);
+
     repaint();
   }
 
 
   public void actionPerformed(ActionEvent e)
   {
-
+    if(e.getSource() == slideshow)
+    {
+      System.out.println("slide");
+    }
+    if(e.getSource() == zoomshow)
+    {
+      System.out.println("zoom");
+    }
   }
 
   /**

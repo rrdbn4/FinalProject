@@ -20,7 +20,7 @@ public class MainFrame extends JFrame
     add(demo);
     demo.init();
     setSize(800,600); 
-    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setVisible(true);
   } 
 }
