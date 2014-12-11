@@ -64,11 +64,11 @@ public class SlideShow extends JInternalFrame implements Runnable
       {
         while(startx >= -imgWidth)
         {
-          startx -= 3;
+          startx -= 1;
           repaint();
           try
           {
-            Thread.sleep(10);
+            Thread.sleep(17);
           }
           catch(InterruptedException e){}
         }
