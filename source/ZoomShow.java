@@ -22,7 +22,7 @@ public class ZoomShow extends JInternalFrame implements Runnable
   public ZoomShow()
   {
     super("Zoom Show", true, true, true, true);
-    setBounds(0, 0, 500, 400);
+    setBounds(0, 0, 600, 400);
     setLayout(new BorderLayout());
 
     executor = Executors.newFixedThreadPool(1);
@@ -41,6 +41,7 @@ public class ZoomShow extends JInternalFrame implements Runnable
       {
         images[i] = new ImageIcon(imagePaths[i].getAbsolutePath()).getImage();
       }
+      currImage = images[0];
       nextImageIndex = 1;
     }
     else
@@ -58,14 +59,14 @@ public class ZoomShow extends JInternalFrame implements Runnable
     {
       while(true)
       {
-        final float maxMargin = 0.4f;
+        final float maxMargin = 0.48f;
         for(float i = maxMargin; i > 0; i -= 0.01f) //enlarge
         {
           margin = i;
           repaint();
           try
           {
-            Thread.sleep(10);
+            Thread.sleep(70);
           }
           catch(InterruptedException e){}
         }
@@ -75,7 +76,7 @@ public class ZoomShow extends JInternalFrame implements Runnable
           repaint();
           try
           {
-            Thread.sleep(10);
+            Thread.sleep(70);
           }
           catch(InterruptedException e){}
         }
@@ -104,11 +105,11 @@ public class ZoomShow extends JInternalFrame implements Runnable
     {
       int height = getHeight() - getInsets().top - getInsets().bottom;
       int width = getWidth() - getInsets().left - getInsets().right;
-      int imgWidth = (int)(width * margin);
-      int imgHeight = (int)(height * margin);
-      int index = 0;
+      int imgHeight = height - (int)(height * margin * 2);
+      int imgWidth = (int)(imgHeight * 1.33f); //4:3 ratio
+      int startx = (int)((float)(width - imgWidth) / 2f);
 
-      g.drawImage(currImage, getInsets().left + (int)(imgWidth * margin), getInsets().top + (int)(height * margin), imgWidth, imgHeight, this);
+      g.drawImage(currImage, startx + getInsets().left, getInsets().top + (int)(height * margin), imgWidth, imgHeight, this);
     }
   }
 }
