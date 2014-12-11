@@ -16,6 +16,7 @@ public class Demo extends JApplet implements ActionListener
   JMenuItem interactive, sequential, slideshow, zoomshow;
 
   SlideShow slideFrame;
+  ZoomShow zoomFrame;
 
   public void init()
   {
@@ -68,7 +69,13 @@ public class Demo extends JApplet implements ActionListener
     }
     if(e.getSource() == zoomshow)
     {
-      System.out.println("zoom");
+      if(zoomFrame == null || zoomFrame.isClosed())
+      {
+        zoomFrame = new ZoomShow();
+        desktop.add(zoomFrame);
+      }
+      zoomFrame.setVisible(true);
+      zoomFrame.toFront();
     }
   }
 
