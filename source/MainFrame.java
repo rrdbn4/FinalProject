@@ -10,7 +10,6 @@ MainFrame is purely used for the ability to run an applet as an application
 */
 public class MainFrame extends JFrame implements ActionListener
 {
-
   /**
   The container for the internal frames
   */
@@ -36,7 +35,10 @@ public class MainFrame extends JFrame implements ActionListener
   The internal frame holding the zoomshow demo
   */
   ZoomShow zoomFrame;
-
+  /** 
+  The internal frame holding author information 
+  */
+  Authors authorsFrame;
 
   /**
   1 Parameter Constructor
@@ -45,9 +47,6 @@ public class MainFrame extends JFrame implements ActionListener
   public MainFrame() 
   {
     super("Audio and Images");
-    setSize(800,600); 
-    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    setVisible(true);
 
     desktop = new JDesktopPane();
     getContentPane().add(desktop);
@@ -55,8 +54,9 @@ public class MainFrame extends JFrame implements ActionListener
 
     menuBar = new JMenuBar();
     setJMenuBar(menuBar);
+	
     JMenu about = new JMenu("About");
-    menuBar.add(about);
+	menuBar.add(about);	
     JMenu demos = new JMenu("Demos");
     menuBar.add(demos);
     JMenu audio = new JMenu("Audio");
@@ -77,7 +77,15 @@ public class MainFrame extends JFrame implements ActionListener
     zoomshow = new JMenuItem("Zoom Show");
     zoomshow.addActionListener(this);
     images.add(zoomshow);
+	
+	author = new JMenuItem("Authors");
+	author.addActionListener(this);
+	about.add(author);
 
+	setSize(800,600); 
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    setVisible(true);
+	
     repaint();
   } 
   
@@ -97,7 +105,7 @@ public class MainFrame extends JFrame implements ActionListener
       slideFrame.setVisible(true);
       slideFrame.toFront();
     }
-    if(e.getSource() == zoomshow)
+    else if(e.getSource() == zoomshow)
     {
       if(zoomFrame == null || zoomFrame.isClosed())
       {
@@ -107,5 +115,16 @@ public class MainFrame extends JFrame implements ActionListener
       zoomFrame.setVisible(true);
       zoomFrame.toFront();
     }
+    else if(e.getSource() == author)
+    {
+      if(authorsFrame == null || authorsFrame.isClosed())
+      {
+        authorsFrame = new Authors();
+        desktop.add(authorsFrame);
+      }
+      authorsFrame.setVisible(true);
+      authorsFrame.toFront();
+    }	
+	
   }
 }
