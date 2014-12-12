@@ -2,6 +2,7 @@ package code;
 import javax.swing.JApplet;
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.swing.border.TitledBorder;
 import java.awt.event.*;
 import java.awt.*;
 import java.io.File;
@@ -9,10 +10,13 @@ import java.util.LinkedList;
 import java.util.*;
 import java.util.concurrent.*;
 
-public class ZoomShow extends JInternalFrame implements Runnable
+public class ZoomShow extends JInternalFrame implements Runnable, ChangeListener
 {
   ExecutorService executor;
-  String anImagePath;
+  final int SLEEP_MAX = 110, SLEEP_MIN = 13, SLEEP_DEFAULT = 45; 
+  int sleepTime = SLEEP_DEFAULT;
+  JPanel container;
+  JSlider speedSlider;
   Image[] images;
   int nextImageIndex;
   Image currImage;
@@ -24,6 +28,14 @@ public class ZoomShow extends JInternalFrame implements Runnable
     super("Zoom Show", true, true, true, true);
     setBounds(0, 0, 600, 400);
     setLayout(new BorderLayout());
+
+    container = new JPanel();
+    container.setLayout(new GridLayout(1, 1));
+    speedSlider = new JSlider(SLEEP_MIN, SLEEP_MAX, SLEEP_DEFAULT);
+    speedSlider.addChangeListener(this);
+    speedSlider.setBorder(new TitledBorder("Speed"));
+    container.add(speedSlider);
+    add(container, BorderLayout.SOUTH);
 
     executor = Executors.newFixedThreadPool(1);
     getImages();
@@ -60,23 +72,24 @@ public class ZoomShow extends JInternalFrame implements Runnable
       while(true)
       {
         final float maxMargin = 0.48f;
-        for(float i = maxMargin; i > 0; i -= 0.01f) //enlarge
+        final float delta = 0.005f;
+        for(float i = maxMargin; i > 0; i -= delta) //enlarge
         {
           margin = i;
           repaint();
           try
           {
-            Thread.sleep(70);
+            Thread.sleep(sleepTime);
           }
           catch(InterruptedException e){}
         }
-        for(float i = 0; i < maxMargin; i += 0.01f) //shrink
+        for(float i = 0; i < maxMargin; i += delta) //shrink
         {
           margin = i;
           repaint();
           try
           {
-            Thread.sleep(70);
+            Thread.sleep(sleepTime);
           }
           catch(InterruptedException e){}
         }
@@ -93,6 +106,11 @@ public class ZoomShow extends JInternalFrame implements Runnable
     repaint();
   }
 
+  public void stateChanged(ChangeEvent e)
+  {
+    sleepTime = (SLEEP_MAX - speedSlider.getValue()) + SLEEP_MIN;
+  }
+
   public void paint(Graphics g)
   {
     super.paint(g);
@@ -103,7 +121,7 @@ public class ZoomShow extends JInternalFrame implements Runnable
     }
     else
     {
-      int height = getHeight() - getInsets().top - getInsets().bottom;
+      int height = getHeight() - getInsets().top - getInsets().bottom - container.getHeight();
       int width = getWidth() - getInsets().left - getInsets().right;
       int imgHeight = height - (int)(height * margin * 2);
       int imgWidth = (int)(imgHeight * 1.33f); //4:3 ratio
