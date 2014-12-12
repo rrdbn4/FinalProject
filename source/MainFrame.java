@@ -39,6 +39,10 @@ public class MainFrame extends JFrame implements ActionListener
   The internal frame holding author information 
   */
   Authors authorsFrame;
+  /**
+  The internal frame holding the problem description
+  */
+  ProblemDescription descFrame;
 
   /**
   1 Parameter Constructor
@@ -82,6 +86,10 @@ public class MainFrame extends JFrame implements ActionListener
 	author.addActionListener(this);
 	about.add(author);
 
+	problemDescription = new JMenuItem("Problem Description");
+	problemDescription.addActionListener(this);
+	about.add(problemDescription);	
+
 	setSize(800,600); 
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setVisible(true);
@@ -124,6 +132,16 @@ public class MainFrame extends JFrame implements ActionListener
       }
       authorsFrame.setVisible(true);
       authorsFrame.toFront();
+    }	
+    else if(e.getSource() == problemDescription)
+    {
+      if(descFrame == null || descFrame.isClosed())
+      {
+        descFrame = new ProblemDescription();
+        desktop.add(descFrame);
+      }
+      descFrame.setVisible(true);
+      descFrame.toFront();
     }	
 	
   }
