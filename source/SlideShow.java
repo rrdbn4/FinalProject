@@ -10,21 +10,64 @@ import java.util.LinkedList;
 import java.util.*;
 import java.util.concurrent.*;
 
+/** 
+The internal frame used to show a slideshow of all the images specified directory
+@author Robert Dunn, Holly Busken, Matt Lindner
+*/
 public class SlideShow extends JInternalFrame implements Runnable, ChangeListener
 {
+  /**
+  The service to manage the tread
+  */
   ExecutorService executor;
+  /**
+  The class' constants for the sleep times used in the animation thread
+  */
   final int SLEEP_MAX = 50, SLEEP_MIN = 2, SLEEP_DEFAULT = 14; 
+  /**
+  The sleep time used in the animation thread
+  */
   int sleepTime = SLEEP_DEFAULT;
+  /**
+  The continer to hold the graphical elements
+  */
   JPanel container;
+  /**
+  The slider used to adjust the speed of the animation
+  */
   JSlider speedSlider;
+  /**
+  The locally stored images
+  */
   Image[] images;
+  /**
+  The array index of the next image up for showing
+  */
   int nextImageIndex;
+  /**
+  The size of the slideshow queue
+  */
   final int IMG_QUEUE_SIZE = 3;
+  /**
+  The queue of images being displayed on the screen
+  */
   Queue<Image> currImages = new LinkedList<Image>();
+  /**
+  The flag to throw if there was a problem getting the images
+  */
   boolean errorState = false;
+  /**
+  The width of each image being displayed
+  */
   int imgWidth;
+  /**
+  The starting x position of the first image in the queue to be drawn
+  */
   int startx = 0;
 
+  /**
+  The default constructor where everything is initialized
+  */
   public SlideShow()
   {
     super("Slide Show", true, true, true, true);
@@ -44,6 +87,10 @@ public class SlideShow extends JInternalFrame implements Runnable, ChangeListene
     start();
   }
 
+  /**
+  Pulls in all the images in a directory and stores them locally for use later
+  Puts the internal frame into an error state if something went wrong
+  */
   public void getImages()
   {
     File dir = new File("./img/");
@@ -63,11 +110,20 @@ public class SlideShow extends JInternalFrame implements Runnable, ChangeListene
       errorState = true;
   }
 
+  /**
+  Start the zooming animation thread
+  */
   public void start()
   {
     executor.execute(this);
   }
 
+  /**
+  The run method for the animation thread
+  Startx is decremented until the first image in the queue goes off screen, then that image
+    is popped from the queue and a new image is added at the tail. This happens continuously
+    for the slideshow animation 
+  */
   public void run()
   {
     if(!errorState)
@@ -96,11 +152,17 @@ public class SlideShow extends JInternalFrame implements Runnable, ChangeListene
     repaint();
   }
 
+  /**
+  The change listener for the speed slider
+  */
   public void stateChanged(ChangeEvent e)
   {
     sleepTime = (SLEEP_MAX - speedSlider.getValue()) + SLEEP_MIN;
   }
 
+  /**
+  The paint method where the images are drawn
+  */
   public void paint(Graphics g)
   {
     super.paint(g);

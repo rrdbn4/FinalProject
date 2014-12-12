@@ -5,19 +5,41 @@ import java.awt.event.*;
 import java.awt.*;
 
 /**
-Demo is the driver class for the 
+Demo is the driver class for the project
 @author Robert Dunn, Holly Busken, Matt Lindner
 */
 public class Demo extends JApplet implements ActionListener
 { 
+  /**
+  The container for the internal frames
+  */
   JDesktopPane desktop;  
+  /**
+  The applet's menu bar
+  */
   JMenuBar menuBar;
+  /**
+  The menu items associated with the about section in the menu
+  */
   JMenuItem author, problemDescription, references, help;
+  /**
+  The menu item associated with the demo section in the menu
+  */
   JMenuItem interactive, sequential, slideshow, zoomshow;
 
+  /**
+  The internal frame holding the slideshow demo
+  */
   SlideShow slideFrame;
+  /**
+  The internal frame holding the zoomshow demo
+  */
   ZoomShow zoomFrame;
 
+  /**
+  The starting method for the applet, similar to main()
+  Everything is setup and initialized here
+  */
   public void init()
   {
     setSize(800, 600);
@@ -54,7 +76,10 @@ public class Demo extends JApplet implements ActionListener
     repaint();
   }
 
-
+  /**
+  The click listener for the menu items in the applet
+  @param e The passed in action event
+  */
   public void actionPerformed(ActionEvent e)
   {
     if(e.getSource() == slideshow)
@@ -80,7 +105,7 @@ public class Demo extends JApplet implements ActionListener
   }
 
   /**
-	Open the applet in a frame
+	Open the applet in a frame is the need arises 
   */
   public static void main(String[] args)
   {

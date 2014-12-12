@@ -10,19 +10,56 @@ import java.util.LinkedList;
 import java.util.*;
 import java.util.concurrent.*;
 
+/** 
+The internal frame used to show a zoomshow of all the images in a specified directory
+@author Robert Dunn, Holly Busken, Matt Lindner
+*/
 public class ZoomShow extends JInternalFrame implements Runnable, ChangeListener
 {
+  /**
+  The service to manage the tread
+  */
   ExecutorService executor;
+  /**
+  The class' constants for the sleep times used in the animation thread
+  */
   final int SLEEP_MAX = 110, SLEEP_MIN = 13, SLEEP_DEFAULT = 45; 
+  /**
+  The sleep time used in the animation thread
+  */
   int sleepTime = SLEEP_DEFAULT;
+  /**
+  The continer to hold the graphical elements
+  */
   JPanel container;
+  /**
+  The slider used to adjust the speed of the animation
+  */
   JSlider speedSlider;
+  /**
+  The locally stored images
+  */
   Image[] images;
+  /**
+  The array index of the next image up for showing
+  */
   int nextImageIndex;
+  /**
+  The current image being displayed
+  */
   Image currImage;
+  /**
+  The flag to throw if there was a problem getting the images
+  */
   boolean errorState = false;
+  /**
+  The margin from the top of the image to the top of the frame measured in percentage of total frame height
+  */
   float margin;
 
+  /**
+  The default constructor where everything is initialized
+  */
   public ZoomShow()
   {
     super("Zoom Show", true, true, true, true);
@@ -42,6 +79,10 @@ public class ZoomShow extends JInternalFrame implements Runnable, ChangeListener
     start();
   }
 
+  /**
+  Pulls in all the images in a directory and stores them locally for use later
+  Puts the internal frame into an error state if something went wrong
+  */
   public void getImages()
   {
     File dir = new File("./img/");
@@ -60,11 +101,17 @@ public class ZoomShow extends JInternalFrame implements Runnable, ChangeListener
       errorState = true;
   }
 
+  /**
+  Start the zooming animation thread
+  */
   public void start()
   {
     executor.execute(this);
   }
 
+  /**
+  The thread's run method where the zooming animation is performed
+  */
   public void run()
   {
     if(!errorState)
@@ -106,11 +153,17 @@ public class ZoomShow extends JInternalFrame implements Runnable, ChangeListener
     repaint();
   }
 
+  /**
+  The change listener for the speed slider
+  */
   public void stateChanged(ChangeEvent e)
   {
     sleepTime = (SLEEP_MAX - speedSlider.getValue()) + SLEEP_MIN;
   }
 
+  /**
+  The paint method where the images are drawn
+  */
   public void paint(Graphics g)
   {
     super.paint(g);
