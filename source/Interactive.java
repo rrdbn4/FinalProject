@@ -23,7 +23,11 @@ public class Interactive extends JInternalFrame implements ActionListener, ListS
   {
     super("Interactive Audio",true,true,true,true);
 	
-	String[] soundNames ={"bird","cat","cricket","dolphin","donkey","elephant","hawk","monkey","pig","rooster"};
+	File audioDir = new File((getClass().getResource("../audio/").toString()).replace("file:/", ""));
+	String[] soundNames = audioDir.list();
+	for(int i=0;i<soundNames.length;i++)
+	  soundNames[i]=soundNames[i].replace(".wav","");
+	//String[] soundNames ={"bird","cat","cricket","dolphin","donkey","elephant","hawk","monkey","pig","rooster"};
 	sounds = new JList(soundNames);
 	sounds.setVisibleRowCount(10);
 	sounds.addListSelectionListener(this);
@@ -65,6 +69,8 @@ public class Interactive extends JInternalFrame implements ActionListener, ListS
   public void valueChanged(ListSelectionEvent event)
   {
     sound=(String)sounds.getSelectedValue();
+	action="Selected";
+	repaint();
   }
   
   public void actionPerformed(ActionEvent event)
