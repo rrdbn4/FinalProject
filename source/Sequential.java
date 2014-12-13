@@ -51,7 +51,9 @@ public class Sequential extends JInternalFrame implements Runnable, LineListener
 			
 			clip.open(audioIn);
 			clip.start();
-		} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e1) {}
+		} catch (UnsupportedAudioFileException e3){}
+		catch(IOException e2){}
+		catch(LineUnavailableException e1) {}
 				
 		image = new ImageIcon(images[index].toString()).getImage();
 		
@@ -72,7 +74,9 @@ public class Sequential extends JInternalFrame implements Runnable, LineListener
 				
 				clip.open(audioIn);
 				clip.start();
-			} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e1) { System.out.println("asd");}
+			} catch (UnsupportedAudioFileException e3){System.out.println("asd");}
+			catch(IOException e2){System.out.println("asd");}
+			catch(LineUnavailableException e1) { System.out.println("asd");}
 			
 			image = new ImageIcon(images[index].toString()).getImage();
 			
