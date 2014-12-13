@@ -9,6 +9,7 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.*;
 import java.util.concurrent.*;
+import java.net.*;
 
 /** 
 The internal frame used to show a slideshow of all the images specified directory
@@ -93,6 +94,7 @@ public class SlideShow extends JInternalFrame implements Runnable, ChangeListene
   */
   public void getImages()
   {
+    // URI url = getClass().getResource("./img/");
     File dir = new File("./img/");
     File[] imagePaths = dir.listFiles();
     if(imagePaths != null)
@@ -101,6 +103,7 @@ public class SlideShow extends JInternalFrame implements Runnable, ChangeListene
       for(int i = 0; i < imagePaths.length; i++)
       {
         images[i] = new ImageIcon(imagePaths[i].getAbsolutePath()).getImage();
+        // System.out.println(imagePaths[i].getPath());
       }
       for(int i = 0; i < IMG_QUEUE_SIZE; i++)  //populate starting queue
         currImages.add(images[i]);

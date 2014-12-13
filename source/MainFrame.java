@@ -51,12 +51,12 @@ public class MainFrame extends JFrame implements ActionListener
   public MainFrame() 
   {
     super("Audio and Images");
-    setSize(800,600); 
     setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    setSize(800,600); 
     setVisible(true);
 
     desktop = new JDesktopPane();
-    getContentPane().add(desktop);
+    add(desktop);
     
 
     menuBar = new JMenuBar();
