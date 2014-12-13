@@ -94,8 +94,20 @@ public class SlideShow extends JInternalFrame implements Runnable, ChangeListene
   */
   public void getImages()
   {
-    // URI url = getClass().getResource("./img/");
-    File dir = new File("./img/");
+    JFileChooser chooser = new JFileChooser("./");
+    chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+    chooser.setDialogTitle("Choose the directory containing the images");
+    File dir = null;
+    if(chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
+    {
+      dir = chooser.getSelectedFile();
+    }
+    else
+    {
+      errorState = true;
+      return;
+    }
+    
     File[] imagePaths = dir.listFiles();
     if(imagePaths != null)
     {
