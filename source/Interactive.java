@@ -24,7 +24,7 @@ public class Interactive extends JInternalFrame implements ActionListener, ListS
     super("Interactive Audio",true,true,true,true);
 	
 	String[] soundNames ={"bird","cat","cricket","dolphin","donkey","elephant","hawk","monkey","pig","rooster"};
-	sounds = new JList<String>(soundNames);
+	sounds = new JList(soundNames);
 	sounds.setVisibleRowCount(10);
 	sounds.addListSelectionListener(this);
 	Border border = new LineBorder(Color.BLACK,2);
