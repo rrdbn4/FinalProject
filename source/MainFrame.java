@@ -89,16 +89,20 @@ public class MainFrame extends JFrame implements ActionListener
     zoomshow.addActionListener(this);
     images.add(zoomshow);
 	
-  	author = new JMenuItem("Authors");
-  	author.addActionListener(this);
-  	about.add(author);
+    author = new JMenuItem("Authors");
+    author.addActionListener(this);
+    about.add(author);
 
-  	problemDescription = new JMenuItem("Problem Description");
-  	problemDescription.addActionListener(this);
-  	about.add(problemDescription);	
+    problemDescription = new JMenuItem("Problem Description");
+    problemDescription.addActionListener(this);
+    about.add(problemDescription);	
+  	
+    help = new JMenuItem("Help");
+    help.addActionListener(this);
+    about.add(help);  	
 
 
-  	validate();
+    validate();
     repaint();
   } 
   
@@ -157,6 +161,16 @@ public class MainFrame extends JFrame implements ActionListener
       }
       interFrame.setVisible(true);
       interFrame.toFront();
+    }  
+    else if(e.getSource() == help)
+    {
+      if(helpFrame == null || helpFrame.isClosed())
+      {
+        helpFrame = new Help();
+        desktop.add(helpFrame);
+      }
+      helpFrame.setVisible(true);
+      helpFrame.toFront();
     }    
 	
   }
