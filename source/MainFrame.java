@@ -54,13 +54,15 @@ public class MainFrame extends JFrame implements ActionListener
 
     desktop = new JDesktopPane();
     getContentPane().add(desktop);
-
+    setSize(800,600); 
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    setVisible(true);
 
     menuBar = new JMenuBar();
     setJMenuBar(menuBar);
 	
     JMenu about = new JMenu("About");
-	menuBar.add(about);	
+	  menuBar.add(about);	
     JMenu demos = new JMenu("Demos");
     menuBar.add(demos);
     JMenu audio = new JMenu("Audio");
@@ -82,18 +84,16 @@ public class MainFrame extends JFrame implements ActionListener
     zoomshow.addActionListener(this);
     images.add(zoomshow);
 	
-	author = new JMenuItem("Authors");
-	author.addActionListener(this);
-	about.add(author);
+  	author = new JMenuItem("Authors");
+  	author.addActionListener(this);
+  	about.add(author);
 
-	problemDescription = new JMenuItem("Problem Description");
-	problemDescription.addActionListener(this);
-	about.add(problemDescription);	
+  	problemDescription = new JMenuItem("Problem Description");
+  	problemDescription.addActionListener(this);
+  	about.add(problemDescription);	
 
-	setSize(800,600); 
-    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    setVisible(true);
-	
+
+  	validate();
     repaint();
   } 
   
