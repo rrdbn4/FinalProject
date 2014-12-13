@@ -43,6 +43,10 @@ public class MainFrame extends JFrame implements ActionListener
   The internal frame holding the problem description
   */
   ProblemDescription descFrame;
+  /**
+  The internal Frame holding the interactive frame
+  */
+  Interactive interFrame;
 
   /**
   1 Parameter Constructor
@@ -144,6 +148,16 @@ public class MainFrame extends JFrame implements ActionListener
       descFrame.setVisible(true);
       descFrame.toFront();
     }	
+    else if(e.getSource() == interactive)
+    {
+      if(interFrame == null || interFrame.isClosed())
+      {
+        interFrame = new Interactive();
+        desktop.add(interFrame);
+      }
+      interFrame.setVisible(true);
+      interFrame.toFront();
+    }    
 	
   }
 }
