@@ -51,6 +51,10 @@ public class MainFrame extends JFrame implements ActionListener
   The internal frame holding help information
   */
   Help helpFrame;  
+  /**
+   * The internal frame holding the Sequential audio/images demo.
+   */
+  Sequential sequentialFrame;
 
   /**
   1 Parameter Constructor
@@ -175,7 +179,17 @@ public class MainFrame extends JFrame implements ActionListener
       }
       helpFrame.setVisible(true);
       helpFrame.toFront();
-    }    
+    }
+    else if(e.getSource() == sequential)
+    {
+    	if (sequentialFrame == null || sequentialFrame.isClosed())
+    	{
+    		sequentialFrame = new Sequential(50, 50, 300, 300);
+    		desktop.add(sequentialFrame);
+    	}
+    	sequentialFrame.setVisible(true);
+    	sequentialFrame.toFront();
+    }
 	
   }
 }

@@ -25,18 +25,29 @@ public class Sequential extends JInternalFrame implements Runnable, LineListener
 		setBounds(x_loc, y_loc, width, height);
 		
 		executor = Executors.newFixedThreadPool(1);
-		
-		imagesDir = new File((getClass().getResource("../img/").toString()).replace("file:/", ""));
-		audioDir = new File((getClass().getResource("../audio/").toString()).replace("file:/", ""));
-				
-		images = imagesDir.listFiles();
-		Arrays.sort(images);
-		audio = audioDir.listFiles();
-		Arrays.sort(audio);
-	
-		setVisible(true);
-		
-		executor.execute(this);
+			
+		JFileChooser chooser = new JFileChooser("./");
+	    chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+	    chooser.setDialogTitle("Choose the directory containing the images");
+	    
+	    if(chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
+	    {
+	      imagesDir = chooser.getSelectedFile();
+	      
+	      if(chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
+	      {
+	    	  audioDir = chooser.getSelectedFile();
+	      
+	    	  images = imagesDir.listFiles();
+	    	  Arrays.sort(images);
+	    	  audio = audioDir.listFiles();
+	    	  Arrays.sort(audio);
+			
+	    	  setVisible(true);
+			
+	    	  executor.execute(this);
+	      }
+	    }
 	}
 	
 	public void run()
