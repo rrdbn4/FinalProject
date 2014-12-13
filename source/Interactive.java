@@ -64,12 +64,14 @@ public class Interactive extends JInternalFrame implements ActionListener, ListS
     setSize(500,300); 
 	setLayout(new FlowLayout());
     setVisible(true);
+	action=" ";
   }
 
   public void valueChanged(ListSelectionEvent event)
   {
     sound=(String)sounds.getSelectedValue();
-	action="Selected";
+	if(action.equals(" "));
+	  action="Selected";
 	repaint();
   }
   
@@ -101,8 +103,14 @@ public class Interactive extends JInternalFrame implements ActionListener, ListS
 	
 	  else if(event.getSource()==loopButton)
 	  {
-	    clip.loop(Clip.LOOP_CONTINUOUSLY);
+	    
 		action="Looping";
+  	    if(clip.isActive())
+	      clip.stop();
+	    action="Playing";
+        createClip();
+		clip.loop(Clip.LOOP_CONTINUOUSLY);
+	    clip.setFramePosition(0);		
 		repaint();
 	  }
 	}
