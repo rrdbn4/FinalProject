@@ -47,6 +47,10 @@ public class MainFrame extends JFrame implements ActionListener
   The internal Frame holding the interactive frame
   */
   Interactive interFrame;
+  /**
+  The internal frame holding help information
+  */
+  Help helpFrame;  
 
   /**
   1 Parameter Constructor
