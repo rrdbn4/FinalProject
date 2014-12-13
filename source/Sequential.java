@@ -17,7 +17,7 @@ public class Sequential extends JInternalFrame implements Runnable, LineListener
 	Clip clip;
 	Image image;
 	AudioInputStream audioIn;
-	int index;
+	int index = 0;
 	
 	public Sequential(final int x_loc, final int y_loc, final int width, final int height)
 	{
@@ -26,16 +26,14 @@ public class Sequential extends JInternalFrame implements Runnable, LineListener
 		
 		executor = Executors.newFixedThreadPool(1);
 		
-		imagesDir = new File("E:/School/Java/Final/bin/img/");
-		audioDir = new File("E:/School/Java/Final/bin/audio/");
+		imagesDir = new File((getClass().getResource("../img/").toString()).replace("file:/", ""));
+		audioDir = new File((getClass().getResource("../audio/").toString()).replace("file:/", ""));
 				
 		images = imagesDir.listFiles();
 		Arrays.sort(images);
 		audio = audioDir.listFiles();
 		Arrays.sort(audio);
-
-		index = 0;
-		
+	
 		setVisible(true);
 		
 		executor.execute(this);
@@ -62,7 +60,7 @@ public class Sequential extends JInternalFrame implements Runnable, LineListener
 	
 	public void update(LineEvent le)
 	{
-		if (le.getType() == LineEvent.Type.STOP)
+		if (le.getType() == LineEvent.Type.STOP && isClosed() == false)
 		{
 			clip.close();
 			index = (index < audio.length - 1)? index + 1: 0;
@@ -74,9 +72,9 @@ public class Sequential extends JInternalFrame implements Runnable, LineListener
 				
 				clip.open(audioIn);
 				clip.start();
-			} catch (UnsupportedAudioFileException e3){System.out.println("asd");}
-			catch(IOException e2){System.out.println("asd");}
-			catch(LineUnavailableException e1) { System.out.println("asd");}
+			} catch (UnsupportedAudioFileException e3){}
+			catch(IOException e2){}
+			catch(LineUnavailableException e1) {}
 			
 			image = new ImageIcon(images[index].toString()).getImage();
 			
