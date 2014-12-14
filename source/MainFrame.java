@@ -79,7 +79,7 @@ public class MainFrame extends JFrame implements ActionListener
     setJMenuBar(menuBar);
 	
     JMenu about = new JMenu("About");
-	  menuBar.add(about);	
+	menuBar.add(about);	
     JMenu demos = new JMenu("Demos");
     menuBar.add(demos);
     JMenu audio = new JMenu("Audio");

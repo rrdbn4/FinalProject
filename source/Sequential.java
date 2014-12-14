@@ -9,69 +9,184 @@ import javax.swing.*;
 
 public class Sequential extends JInternalFrame implements Runnable, LineListener
 {
+	/**
+	 * Manages sorting thread.
+	 */
 	private ExecutorService executor;
-	
-	private File imagesDir, audioDir;
-	private File[] images, audio;
-	
-	Clip clip;
-	Image image;
-	AudioInputStream audioIn;
+	/**
+	 * Contains the pathname of the images directory.
+	 */
+	private File imagesDir;
+	/**
+	 * Contains the pathname of the audio directory.
+	 */
+	private File audioDir;
+	/**
+	 * Contains the pathname of each image in the images directory.
+	 */
+	private File[] images;
+	/**
+	 * Contains the pathname of each audio file in the audio directory.
+	 */
+	private File[] audio;
+	/**
+	 * Once an audio clip is loaded, used to play each clip.
+	 */
+	private Clip clip;
+	/**
+	 * Contains the image that will be displayed every time a new audio clip is played.
+	 */
+	private Image image;
+	/**
+	 * Used to load each audio clip.
+	 */
+	private AudioInputStream audioIn;
+	/**
+	 * Indicates which element of the images and audio array we are currently playing/displaying.
+	 */
 	int index = 0;
+	/**
+	 * The flag to throw if there was a problem getting the images.
+	 */
+	private boolean imagesErrorState = false;
+	/**
+	 * The flag to throw if there was a problem getting the audio.
+	 */
+	private boolean audioErrorState = false;
+	/**
+	 * Extra Credit as per Dr. Sabharwal's in-class explanation: JFileChooser that allows grader to select folders containing images + audio files.
+	 */
+	private JFileChooser chooser;
 	
+	/**
+	 * Constructor for the Sequential Class. Creates new JInternal Frame, attempts to load
+	 * images and audio files, and starts a thread to display each image with an audio file.
+	 * If loading either of the directories fails, fail flags are set.
+	 * @param x_loc X-coordinate where JInternal Frame will be drawn.
+	 * @param y_loc Y-coordinate where JInternal Frame will be drawn.
+	 * @param width Width of the JInternalFrame
+	 * @param height Height of the JInternalFrame
+	 */
 	public Sequential(final int x_loc, final int y_loc, final int width, final int height)
 	{
 		super("Sequential", true, true, true, true);
 		setBounds(x_loc, y_loc, width, height);
 		
+		/**
+		 * The thread pool only contains 1 thread, the one doing the image/audio work.
+		 */
 		executor = Executors.newFixedThreadPool(1);
-			
-		JFileChooser chooser = new JFileChooser("./");
+		
+		chooser = new JFileChooser("./");
+		/**
+		 * The JFileChooser allows the user to select FOLDERS.
+		 */
 	    chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-	    chooser.setDialogTitle("Choose the directory containing the images");
 	    
+	    chooser.setDialogTitle("Choose the directory containing the IMAGES.");
 	    if(chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
 	    {
-	      imagesDir = chooser.getSelectedFile();
-	      
-	      if(chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
-	      {
-	    	  audioDir = chooser.getSelectedFile();
-	      
-	    	  images = imagesDir.listFiles();
-	    	  Arrays.sort(images);
-	    	  audio = audioDir.listFiles();
-	    	  Arrays.sort(audio);
-			
-	    	  setVisible(true);
-			
-	    	  executor.execute(this);
-	      }
+	    	/**
+	    	 * Store the filepath of the img directory in the imagesDir variable.
+	    	 */
+	    	imagesDir = chooser.getSelectedFile();
+	    	/**
+	    	 * Store the filepath of each img file in the images directory.
+	    	 */
+	    	images = imagesDir.listFiles();
+	    	/**
+	    	 * Sort the image paths in alphabetical order.
+	    	 * Since both the images and audio File[] arrays are in the same order,
+	    	 * for demonstration purposes it ensures that the correct image is displayed
+	    	 * with each sound bite. 
+	    	 */
+	    	Arrays.sort(images);
+	    } 
+	    else
+	    {
+	    	/**
+	    	 * If the user did not select an image folder, set the image error bit.
+	    	 */
+	    	imagesErrorState = true;
 	    }
+	    
+	    chooser.setDialogTitle("Choose the directory containing the AUDIO files.");
+	    if(chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
+	    {
+			/**
+			 * Store the filepath of the audio directory in the audioDir variable.
+			 */
+			 audioDir = chooser.getSelectedFile();
+			 /**
+	    	  * Store the filepath of each audio file in the audio directory.
+	    	  */
+			 audio = audioDir.listFiles();
+			 /**
+	    	  * Sort the audio paths in alphabetical order.
+	    	  * Since both the images and audio File[] arrays are in the same order,
+	    	  * for demonstration purposes it ensures that the correct image is displayed
+	    	  * with each sound bite. 
+	    	  */
+			 Arrays.sort(audio);
+	    }
+	    else
+	    {
+	    	/**
+	    	 * If the user did not select an audio folder, set the audio error bit.
+	    	 */
+	    	audioErrorState = true;
+	    }
+	    
+	    setVisible(true);
+  	  	executor.execute(this);
+	    repaint();
 	}
 	
+	/**
+	 * The function called when execute() is called.
+	 * If the user selected image and audio directories, the first audio and image files are loaded, and displayed.
+	 * A line listener is added to the audio clip playing. Once it is done playing, the update() function is called, 
+	 * and the next set of images and audio files will be loaded, and played.
+	 */
 	public void run()
 	{
-		try
+		/**
+		 * Using the default images and audio files provided, for demonstration purposes,
+		 * the correct image file will be displayed for each song since they are at the same
+		 * index in their respective arrays.
+		 */
+		
+		if (!imagesErrorState && !audioErrorState)
 		{
-			audioIn = AudioSystem.getAudioInputStream(audio[index].toURI().toURL());
-			clip = AudioSystem.getClip();
-			clip.addLineListener(this);
-			
-			clip.open(audioIn);
-			clip.start();
-		} catch (UnsupportedAudioFileException e3){}
-		catch(IOException e2){}
-		catch(LineUnavailableException e1) {}
+			try
+			{
+				audioIn = AudioSystem.getAudioInputStream(audio[index].toURI().toURL());
+				clip = AudioSystem.getClip();
+				clip.addLineListener(this);
 				
-		image = new ImageIcon(images[index].toString()).getImage();
+				clip.open(audioIn);
+				clip.start();
+			} catch (UnsupportedAudioFileException e3){}
+			catch(IOException e2){}
+			catch(LineUnavailableException e1) {}
+					
+			image = new ImageIcon(images[index].toString()).getImage();
+		}
 		
 		repaint();
 	}
 	
+	/**
+	 * Detects when each audio file has finished playing.
+	 * Loads the next audio/image set, and plays/displays them.
+	 */
 	public void update(LineEvent le)
 	{
-		if (le.getType() == LineEvent.Type.STOP && isClosed() == false)
+		/**
+		 * The infinite loop for playing the audio directory only continues as long as the
+		 * JInternalFrame is open (!isClosed()).
+		 */
+		if (le.getType() == LineEvent.Type.STOP && !isClosed())
 		{
 			clip.close();
 			index = (index < audio.length - 1)? index + 1: 0;
@@ -93,6 +208,11 @@ public class Sequential extends JInternalFrame implements Runnable, LineListener
 		}
 	}
 	
+	/**
+	 * Draws the current image, utilizing the entire JInternalFrame space.
+	 * If there was an error loading either the audio or images directory,
+	 * an error message will be displayed instead.
+	 */
 	public void paint(Graphics g)
 	{
 		super.paint(g);
@@ -102,6 +222,14 @@ public class Sequential extends JInternalFrame implements Runnable, LineListener
 		int width = getWidth() - getInsets().left - getInsets().right;
 		int height = getHeight() - getInsets().top - getInsets().bottom - 23;
 		
-		g.drawImage(image, left, top, width, height, this);
+		if (audioErrorState || imagesErrorState)
+		{
+			String errorMsg = "Error loading " + ((imagesErrorState)?("Images directory"):("")) + ((imagesErrorState && audioErrorState)?(" and "):("")) + ((audioErrorState)?("Audio directory"):(""));
+			g.drawString(errorMsg, 20, 50);
+		}
+		else
+		{
+			g.drawImage(image, left, top, width, height, this);
+		}
 	}
 }
