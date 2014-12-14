@@ -55,6 +55,10 @@ public class MainFrame extends JFrame implements ActionListener
    * The internal frame holding the Sequential audio/images demo.
    */
   Sequential sequentialFrame;
+  /**
+   * The internal frame containing a list of references.
+   */
+  References referencesFrame;
 
   /**
   1 Parameter Constructor
@@ -105,6 +109,10 @@ public class MainFrame extends JFrame implements ActionListener
     problemDescription.addActionListener(this);
     about.add(problemDescription);	
   	
+    references = new JMenuItem("References");
+    references.addActionListener(this);
+    about.add(references);  	
+    
     help = new JMenuItem("Help");
     help.addActionListener(this);
     about.add(help);  	
@@ -189,6 +197,16 @@ public class MainFrame extends JFrame implements ActionListener
     	}
     	sequentialFrame.setVisible(true);
     	sequentialFrame.toFront();
+    }
+    else if(e.getSource() == references)
+    {
+    	if (referencesFrame == null || referencesFrame.isClosed())
+    	{
+    		referencesFrame = new References();
+    		desktop.add(referencesFrame);
+    	}
+    	referencesFrame.setVisible(true);
+    	referencesFrame.toFront();
     }
 	
   }
