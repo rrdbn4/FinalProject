@@ -24,6 +24,8 @@ public class Interactive extends JInternalFrame implements ActionListener, ListS
     super("Interactive Audio",true,true,true,true);
 	
 	File audioDir = new File((getClass().getResource("../audio/").toString()).replace("file:/", ""));
+	if(audioDir == null)
+	  audioDir = new File((getClass().getResource("..\audio\").toString()).replace("file:/", ""));
 	String[] soundNames = audioDir.list();
 	for(int i=0;i<soundNames.length;i++)
 	  soundNames[i]=soundNames[i].replace(".wav","");
