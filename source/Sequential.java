@@ -15,10 +15,10 @@ public class Sequential extends JInternalFrame implements Runnable, LineListener
 	 * Manages sorting thread.
 	 */
 	public ExecutorService executor;
-	
+	/**
+	 * Array containing the filenames (minus extensions) 
+	 */
 	String[] fileNames ={"bird","cat","cricket","dolphin","donkey","elephant","hawk","monkey","pig","rooster"};
-	
-	
 	/**
 	 * Contains the pathname of each image in the images directory.
 	 */
@@ -75,27 +75,36 @@ public class Sequential extends JInternalFrame implements Runnable, LineListener
 		 */
 		executor = Executors.newFixedThreadPool(1);
 		
-    	
+    	/**
+    	 * Create the file arrays we will be saving our images and audio files in.
+    	 */
     	images = new File[fileNames.length];
     	audio = new File[fileNames.length];
     	
     	for (int i = 0; i < fileNames.length; i++)
     	{
-    		
+    		/**
+    		 * Get all the audio files.
+    		 */
     		try
     		{
 				audio[i] = new File((getClass().getResource("/audio/"+fileNames[i]+".wav").toURI()));
-				images[i] = new File((getClass().getResource("/img/"+fileNames[i]+".jpg").toURI()));
-			} catch (URISyntaxException e) {}
-    	}
+			} catch (URISyntaxException e) {audioErrorState = true;}
+    		/**
+    		 * Get all the image files.
+    		 */
+    		try
+    		{
+    			images[i] = new File((getClass().getResource("/img/"+fileNames[i]+".jpg").toURI()));
+    		} catch (URISyntaxException e) {imagesErrorState = true;}
+    	} 	
     	
-    	
+    	/**
+    	 * Ensure that each File array is in the same order. This way, we ensure that the correct image is displayed for each audio clip.
+    	 */
     	Arrays.sort(images);
     	Arrays.sort(audio);
-	   
- 
 
-	    
 	    setVisible(true);
   	  	executor.execute(this);
 	    repaint();
