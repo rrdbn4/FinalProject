@@ -159,7 +159,7 @@ public class Interactive extends JInternalFrame implements ActionListener, ListS
 	{
 	  int x = getWidth()/2;
 	  g.drawString(action+": " + sound, getWidth()/2,170);
-	  Image image = new ImageIcon(getClass().getResource("../img/"+sound+".jpg")).getImage();
+	  Image image = new ImageIcon(getClass().getResource("/img/"+sound+".jpg")).getImage();
 	  g.drawImage(image,x,175, 100,100,this);
 	}
   }
