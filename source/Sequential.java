@@ -86,17 +86,11 @@ public class Sequential extends JInternalFrame implements Runnable, LineListener
     		/**
     		 * Get all the audio files.
     		 */
-    		try
-    		{
-				audio[i] = new File((getClass().getResource("/audio/"+fileNames[i]+".wav").toURI()));
-			} catch (URISyntaxException e) {audioErrorState = true;}
+			audio[i] = new File((getClass().getResource("/audio/"+fileNames[i]+".wav").toString().replace("file:/", "")));
     		/**
     		 * Get all the image files.
     		 */
-    		try
-    		{
-    			images[i] = new File((getClass().getResource("/img/"+fileNames[i]+".jpg").toURI()));
-    		} catch (URISyntaxException e) {imagesErrorState = true;}
+			images[i] = new File((getClass().getResource("/img/"+fileNames[i]+".jpg").toString().replace("file:/", "")));
     	} 	
     	
     	/**
