@@ -94,18 +94,17 @@ public class SlideShow extends JInternalFrame implements Runnable, ChangeListene
   */
   public void getImages()
   {
-    String[] imageNames ={"bird","cat","cricket","dolphin","donkey","elephant","hawk","monkey","pig","rooster"};
+   String[] imageNames ={"bird","cat","cricket","dolphin","donkey","elephant","hawk","monkey","pig","rooster"};
 
 	  images = new Image[imageNames.length];
 	  for(int i = 0; i < imageNames.length; i++)
 	  {
-	    images[i] = new ImageIcon(getClass().getResource("../img/"+imageNames[i]+".jpg")).getImage();
+	    images[i] = new ImageIcon(getClass().getResource("/img/"+imageNames[i]+".jpg")).getImage();
 	    // System.out.println(imagePaths[i].getPath());
 	  }
 	  for(int i = 0; i < IMG_QUEUE_SIZE; i++)  //populate starting queue
 	    currImages.add(images[i]);
 	  nextImageIndex = IMG_QUEUE_SIZE;
-  
   }
 
   /**

@@ -90,7 +90,7 @@ public class ZoomShow extends JInternalFrame implements Runnable, ChangeListener
       images = new Image[imageNames.length];
       for(int i = 0; i < imageNames.length; i++)
       {
-        images[i] = new ImageIcon(getClass().getResource("../img/"+imageNames[i]+".jpg")).getImage();
+        images[i] = new ImageIcon(getClass().getResource("/img/"+imageNames[i]+".jpg")).getImage();
       }
       currImage = images[0];
       nextImageIndex = 1;
