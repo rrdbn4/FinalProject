@@ -2,11 +2,8 @@ package code;
 
 import java.awt.*;
 import java.io.*;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.*;
 import java.util.concurrent.*;
-
 import javax.sound.sampled.*;
 import javax.swing.*;
 
@@ -78,11 +75,11 @@ public class Sequential extends JInternalFrame implements Runnable, LineListener
 			clip = AudioSystem.getClip();
 			clip.open(audioIn);
 		}catch(UnsupportedAudioFileException e) 
-		{ System.out.println("Unsupported Audio");}
+		{audioErrorState = true;}
 	    catch(IOException e) 
-		{ System.out.println("Cannot find File");}
+		{audioErrorState = true;}
 	    catch(LineUnavailableException e) 
-		{ System.out.println("Line Unavailable");} 
+		{audioErrorState = true;} 
 		
 		/**
 		 * Get all the first image file.
