@@ -2,8 +2,10 @@ package code;
 
 import java.awt.*;
 import java.io.*;
+import java.net.URISyntaxException;
 import java.util.*;
 import java.util.concurrent.*;
+
 import javax.sound.sampled.*;
 import javax.swing.*;
 
@@ -12,15 +14,11 @@ public class Sequential extends JInternalFrame implements Runnable, LineListener
 	/**
 	 * Manages sorting thread.
 	 */
-	private ExecutorService executor;
-	/**
-	 * Contains the pathname of the images directory.
-	 */
-	private File imagesDir;
-	/**
-	 * Contains the pathname of the audio directory.
-	 */
-	private File audioDir;
+	public ExecutorService executor;
+	
+	String[] fileNames ={"bird","cat","cricket","dolphin","donkey","elephant","hawk","monkey","pig","rooster"};
+	
+	
 	/**
 	 * Contains the pathname of each image in the images directory.
 	 */
@@ -54,9 +52,9 @@ public class Sequential extends JInternalFrame implements Runnable, LineListener
 	 */
 	private boolean audioErrorState = false;
 	/**
-	 * Extra Credit as per Dr. Sabharwal's in-class explanation: JFileChooser that allows grader to select folders containing images + audio files.
+	 * Flag used to prevent audio from playing after JFrame has been closed.
 	 */
-	private JFileChooser chooser;
+	private boolean isRunning = true;
 	
 	/**
 	 * Constructor for the Sequential Class. Creates new JInternal Frame, attempts to load
@@ -77,65 +75,26 @@ public class Sequential extends JInternalFrame implements Runnable, LineListener
 		 */
 		executor = Executors.newFixedThreadPool(1);
 		
-		chooser = new JFileChooser("./");
-		/**
-		 * The JFileChooser allows the user to select FOLDERS.
-		 */
-	    chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-	    
-	    chooser.setDialogTitle("Choose the directory containing the IMAGES.");
-	    if(chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
-	    {
-	    	/**
-	    	 * Store the filepath of the img directory in the imagesDir variable.
-	    	 */
-	    	imagesDir = chooser.getSelectedFile();
-	    	/**
-	    	 * Store the filepath of each img file in the images directory.
-	    	 */
-	    	images = imagesDir.listFiles();
-	    	/**
-	    	 * Sort the image paths in alphabetical order.
-	    	 * Since both the images and audio File[] arrays are in the same order,
-	    	 * for demonstration purposes it ensures that the correct image is displayed
-	    	 * with each sound bite. 
-	    	 */
-	    	Arrays.sort(images);
-	    } 
-	    else
-	    {
-	    	/**
-	    	 * If the user did not select an image folder, set the image error bit.
-	    	 */
-	    	imagesErrorState = true;
-	    }
-	    
-	    chooser.setDialogTitle("Choose the directory containing the AUDIO files.");
-	    if(chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
-	    {
-			/**
-			 * Store the filepath of the audio directory in the audioDir variable.
-			 */
-			 audioDir = chooser.getSelectedFile();
-			 /**
-	    	  * Store the filepath of each audio file in the audio directory.
-	    	  */
-			 audio = audioDir.listFiles();
-			 /**
-	    	  * Sort the audio paths in alphabetical order.
-	    	  * Since both the images and audio File[] arrays are in the same order,
-	    	  * for demonstration purposes it ensures that the correct image is displayed
-	    	  * with each sound bite. 
-	    	  */
-			 Arrays.sort(audio);
-	    }
-	    else
-	    {
-	    	/**
-	    	 * If the user did not select an audio folder, set the audio error bit.
-	    	 */
-	    	audioErrorState = true;
-	    }
+    	
+    	images = new File[fileNames.length];
+    	audio = new File[fileNames.length];
+    	
+    	for (int i = 0; i < fileNames.length; i++)
+    	{
+    		
+    		try
+    		{
+				audio[i] = new File((getClass().getResource("/audio/"+fileNames[i]+".wav").toURI()));
+				images[i] = new File((getClass().getResource("/img/"+fileNames[i]+".jpg").toURI()));
+			} catch (URISyntaxException e) {}
+    	}
+    	
+    	
+    	Arrays.sort(images);
+    	Arrays.sort(audio);
+	   
+ 
+
 	    
 	    setVisible(true);
   	  	executor.execute(this);
@@ -186,7 +145,7 @@ public class Sequential extends JInternalFrame implements Runnable, LineListener
 		 * The infinite loop for playing the audio directory only continues as long as the
 		 * JInternalFrame is open (!isClosed()).
 		 */
-		if (le.getType() == LineEvent.Type.STOP && !isClosed())
+		if (le.getType() == LineEvent.Type.STOP && !isClosed() && isRunning)
 		{
 			clip.close();
 			index = (index < audio.length - 1)? index + 1: 0;
@@ -231,5 +190,10 @@ public class Sequential extends JInternalFrame implements Runnable, LineListener
 		{
 			g.drawImage(image, left, top, width, height, this);
 		}
+	}
+	
+	public void stop()
+	{
+		isRunning = false;
 	}
 }
