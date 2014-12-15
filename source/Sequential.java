@@ -3,6 +3,7 @@ package code;
 import java.awt.*;
 import java.io.*;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -19,14 +20,6 @@ public class Sequential extends JInternalFrame implements Runnable, LineListener
 	 * Array containing the filenames (minus extensions) 
 	 */
 	String[] fileNames ={"bird","cat","cricket","dolphin","donkey","elephant","hawk","monkey","pig","rooster"};
-	/**
-	 * Contains the pathname of each image in the images directory.
-	 */
-	private File[] images;
-	/**
-	 * Contains the pathname of each audio file in the audio directory.
-	 */
-	private File[] audio;
 	/**
 	 * Once an audio clip is loaded, used to play each clip.
 	 */
@@ -74,31 +67,30 @@ public class Sequential extends JInternalFrame implements Runnable, LineListener
 		 * The thread pool only contains 1 thread, the one doing the image/audio work.
 		 */
 		executor = Executors.newFixedThreadPool(1);
+		 	
+		/**
+		 * Get the first audio file.
+		 */
+		try
+		{
+			URL url = this.getClass().getResource("/audio/"+fileNames[index]+".wav");
+			audioIn = AudioSystem.getAudioInputStream(url);
+			clip = AudioSystem.getClip();
+			clip.open(audioIn);
+		}catch(UnsupportedAudioFileException e) 
+		{ System.out.println("Unsupported Audio");}
+	    catch(IOException e) 
+		{ System.out.println("Cannot find File");}
+	    catch(LineUnavailableException e) 
+		{ System.out.println("Line Unavailable");} 
 		
-    	/**
-    	 * Create the file arrays we will be saving our images and audio files in.
-    	 */
-    	images = new File[fileNames.length];
-    	audio = new File[fileNames.length];
+		/**
+		 * Get all the first image file.
+		 */
+		URL url = this.getClass().getResource("/img/"+fileNames[index]+".jpg");
+		image = new ImageIcon(url).getImage();
+		
     	
-    	for (int i = 0; i < fileNames.length; i++)
-    	{
-    		/**
-    		 * Get all the audio files.
-    		 */
-			audio[i] = new File((getClass().getResource("/audio/"+fileNames[i]+".wav").toString().replace("file:/", "")));
-    		/**
-    		 * Get all the image files.
-    		 */
-			images[i] = new File((getClass().getResource("/img/"+fileNames[i]+".jpg").toString().replace("file:/", "")));
-    	} 	
-    	
-    	/**
-    	 * Ensure that each File array is in the same order. This way, we ensure that the correct image is displayed for each audio clip.
-    	 */
-    	Arrays.sort(images);
-    	Arrays.sort(audio);
-
 	    setVisible(true);
   	  	executor.execute(this);
 	    repaint();
@@ -122,7 +114,8 @@ public class Sequential extends JInternalFrame implements Runnable, LineListener
 		{
 			try
 			{
-				audioIn = AudioSystem.getAudioInputStream(audio[index].toURI().toURL());
+				URL url = this.getClass().getResource("/audio/"+fileNames[index]+".wav");
+				audioIn = AudioSystem.getAudioInputStream(url);
 				clip = AudioSystem.getClip();
 				clip.addLineListener(this);
 				
@@ -132,7 +125,8 @@ public class Sequential extends JInternalFrame implements Runnable, LineListener
 			catch(IOException e2){}
 			catch(LineUnavailableException e1) {}
 					
-			image = new ImageIcon(images[index].toString()).getImage();
+			URL url = this.getClass().getResource("/img/"+fileNames[index]+".jpg");
+			image = new ImageIcon(url).getImage();
 		}
 		
 		repaint();
@@ -151,10 +145,12 @@ public class Sequential extends JInternalFrame implements Runnable, LineListener
 		if (le.getType() == LineEvent.Type.STOP && !isClosed() && isRunning)
 		{
 			clip.close();
-			index = (index < audio.length - 1)? index + 1: 0;
+			index = (index < fileNames.length - 1)? index + 1: 0;
 			
-			try {
-				audioIn = AudioSystem.getAudioInputStream(audio[index].toURI().toURL());
+			try
+			{
+				URL url = this.getClass().getResource("/audio/"+fileNames[index]+".wav");
+				audioIn = AudioSystem.getAudioInputStream(url);
 				clip = AudioSystem.getClip();
 				clip.addLineListener(this);
 				
@@ -164,7 +160,8 @@ public class Sequential extends JInternalFrame implements Runnable, LineListener
 			catch(IOException e2){}
 			catch(LineUnavailableException e1) {}
 			
-			image = new ImageIcon(images[index].toString()).getImage();
+			URL url = this.getClass().getResource("/img/"+fileNames[index]+".jpg");
+			image = new ImageIcon(url).getImage();
 			
 			repaint();
 		}
