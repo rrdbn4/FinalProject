@@ -9,6 +9,10 @@ import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.event.ListSelectionListener;
 
+/**
+Interactive is the class that holds all the variables and functions neccessary to create
+an interactive frame for sound.
+*/
 public class Interactive extends JInternalFrame implements ActionListener, ListSelectionListener
 {
   
@@ -18,7 +22,10 @@ public class Interactive extends JInternalFrame implements ActionListener, ListS
   String action;
   Clip clip;
   
-  
+  /**
+  This constructor creates buttons to start, stop, and loop the sounds and creates a
+  list of animals to choose sounds from.
+  */  
   public Interactive()
   {
     super("Interactive Audio",true,true,true,true);	
@@ -61,7 +68,11 @@ public class Interactive extends JInternalFrame implements ActionListener, ListS
     setVisible(true);
 	action=" ";
   }
-
+   /**
+   This is automatically called when changes occur in what is selected 
+   in the list of animals and responds accordingly.
+   @param event is the selection event that occured.
+   */
   public void valueChanged(ListSelectionEvent event)
   {
     sound=(String)sounds.getSelectedValue();
@@ -70,6 +81,11 @@ public class Interactive extends JInternalFrame implements ActionListener, ListS
 	repaint();
   }
   
+   /**
+   This is automatically called when buttons are pressed
+   and responds accordingly.
+   @param event is the selection event that occured.
+   */  
   public void actionPerformed(ActionEvent event)
   {
     if(clip == null && sound!=null)
@@ -111,6 +127,10 @@ public class Interactive extends JInternalFrame implements ActionListener, ListS
 	}
   }
   
+  /**
+  This method will create an audio clip from the list of animals
+  and find a corresponding image and display it.
+  */
   public void createClip()
   {
 	    try{
@@ -129,6 +149,10 @@ public class Interactive extends JInternalFrame implements ActionListener, ListS
 		
   }
   
+  /**
+  The paint method is used to display the image of the animal
+  and information about the selection in the list.
+  */
   public void paint(Graphics g)
   {
     super.paint(g);

@@ -29,6 +29,7 @@ public class References extends JInternalFrame
 		super("References", true, true, true, true);
 		setBounds(20, 20, width, height);
 		String output ="Sequential was based on Dr. Sabharwal's class notes: \"HO_07_03MoreAudio.pdf\"\n";
+		output +="Interactive was based on Dr. Sabharwal's class notes: \"HO_07_03MoreAudioBb.docx\"\n";
 		textArea = new JTextArea(output);
 		
 		/**
