@@ -115,12 +115,11 @@ public class Interactive extends JInternalFrame implements ActionListener, ListS
 	  else if(event.getSource()==loopButton)
 	  {
 	    
-		action="Looping";
+	    action="Looping";
   	    if(clip.isActive())
 	      clip.stop();
-	    action="Playing";
-        createClip();
-		clip.loop(Clip.LOOP_CONTINUOUSLY);
+            createClip();
+	    clip.loop(Clip.LOOP_CONTINUOUSLY);
 	    clip.setFramePosition(0);		
 		repaint();
 	  }
