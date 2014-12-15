@@ -133,7 +133,7 @@ public class Interactive extends JInternalFrame implements ActionListener, ListS
   public void createClip()
   {
 	    try{
-          URL url = this.getClass().getResource("../audio/"+sound+".wav");
+          URL url = this.getClass().getResource("/audio/"+sound+".wav");
 		  AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
 		  clip = AudioSystem.getClip();
 		  clip.open(audioIn);
