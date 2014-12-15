@@ -94,35 +94,18 @@ public class SlideShow extends JInternalFrame implements Runnable, ChangeListene
   */
   public void getImages()
   {
-    JFileChooser chooser = new JFileChooser("./");
-    chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-    chooser.setDialogTitle("Choose the directory containing the images");
-    File dir = null;
-    if(chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
-    {
-      dir = chooser.getSelectedFile();
-    }
-    else
-    {
-      errorState = true;
-      return;
-    }
-    
-    File[] imagePaths = dir.listFiles();
-    if(imagePaths != null)
-    {
-      images = new Image[imagePaths.length];
-      for(int i = 0; i < imagePaths.length; i++)
-      {
-        images[i] = new ImageIcon(imagePaths[i].getAbsolutePath()).getImage();
-        // System.out.println(imagePaths[i].getPath());
-      }
-      for(int i = 0; i < IMG_QUEUE_SIZE; i++)  //populate starting queue
-        currImages.add(images[i]);
-      nextImageIndex = IMG_QUEUE_SIZE;
-    }
-    else
-      errorState = true;
+    String[] imageNames ={"bird","cat","cricket","dolphin","donkey","elephant","hawk","monkey","pig","rooster"};
+
+	  images = new Image[imageNames.length];
+	  for(int i = 0; i < imageNames.length; i++)
+	  {
+	    images[i] = new ImageIcon(getClass().getResource("../img/"+imageNames[i]+".jpg")).getImage();
+	    // System.out.println(imagePaths[i].getPath());
+	  }
+	  for(int i = 0; i < IMG_QUEUE_SIZE; i++)  //populate starting queue
+	    currImages.add(images[i]);
+	  nextImageIndex = IMG_QUEUE_SIZE;
+  
   }
 
   /**

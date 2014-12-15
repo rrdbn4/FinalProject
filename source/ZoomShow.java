@@ -85,33 +85,15 @@ public class ZoomShow extends JInternalFrame implements Runnable, ChangeListener
   */
   public void getImages()
   {
-    JFileChooser chooser = new JFileChooser("./");
-    chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-    chooser.setDialogTitle("Choose the directory containing the images");
-    File dir = null;
-    if(chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
-    {
-      dir = chooser.getSelectedFile();
-    }
-    else
-    {
-      errorState = true;
-      return;
-    }
-    
-    File[] imagePaths = dir.listFiles();
-    if(imagePaths != null)
-    {
-      images = new Image[imagePaths.length];
-      for(int i = 0; i < imagePaths.length; i++)
+    String[] imageNames ={"bird","cat","cricket","dolphin","donkey","elephant","hawk","monkey","pig","rooster"};
+
+      images = new Image[imageNames.length];
+      for(int i = 0; i < imageNames.length; i++)
       {
-        images[i] = new ImageIcon(imagePaths[i].getAbsolutePath()).getImage();
+        images[i] = new ImageIcon(getClass().getResource("../img/"+imageNames[i]+".jpg")).getImage();
       }
       currImage = images[0];
       nextImageIndex = 1;
-    }
-    else
-      errorState = true;
   }
 
   /**
